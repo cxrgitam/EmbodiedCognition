@@ -9,7 +9,7 @@ public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
     [SerializeField]
     private Camera cameraToRecord = null;
     [SerializeField]
-    private string dataPath;
+    public string dataPath;
     [SerializeField]
     private string eventName;
     [SerializeField]
