@@ -8,6 +8,7 @@ public class GizmosTest : MonoBehaviour
 {
     [SerializeField] private List<Vector3> plotPoints = new List<Vector3>();
     public string filePath;
+    private int numOfPoints;
 
     public class Coordinates
     {
@@ -27,6 +28,7 @@ public class GizmosTest : MonoBehaviour
     }
 
     public JsonFile myJsonFileList = new JsonFile();
+
 
     //Vector3[] points;
 
@@ -59,7 +61,23 @@ public class GizmosTest : MonoBehaviour
         //int value2 = (int)jsonObject["key2"];
 
         //Debug.Log(myJsonFileList.jsonFile[0].Position.y);
+        foreach(var str in jsonText)
+        {
+            if(str == 'P')
+            {
+                numOfPoints++;
+            }
+        }
+        plotPoints.Capacity = numOfPoints;
+
+        for(int i =0; i< numOfPoints; i++)
+        {
+            plotPoints[i] = new Vector3((float)(deserialized.jsonFile[i].Position.x), (float)(deserialized.jsonFile[i].Position.y), (float)(deserialized.jsonFile[i].Position.z));
+            Debug.Log(plotPoints[i]);
+        }
+
         Debug.Log(deserialized.jsonFile[2].Position.y);
+        Debug.Log(numOfPoints);
 
     }
 
@@ -87,6 +105,7 @@ public class GizmosTest : MonoBehaviour
             }
             
         }
+
 
 
         // Draws a 5 unit long red line in front of the object

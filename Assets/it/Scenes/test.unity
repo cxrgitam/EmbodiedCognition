@@ -448,8 +448,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1295084331}
-  - component: {fileID: 1295084332}
   - component: {fileID: 1295084333}
+  - component: {fileID: 1295084334}
   m_Layer: 0
   m_Name: gizmos Scripts
   m_TagString: Untagged
@@ -472,23 +472,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1295084332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1295084329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c9106966d3140446a70e1803914a790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plotPoints:
-  - {x: 0, y: 0, z: 0}
-  - {x: 1, y: 0, z: 0}
-  - {x: 1, y: 1, z: 0}
-  filePath: Assets/it/Test-data/json-fr123.txt
 --- !u!114 &1295084333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,12 +484,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d71dd232aabf374da1b71845539ae9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filePath: Assets/it/Test-data/json-fr123.txt
+  filePath: Assets/it/Scenes/2024-03-05-16_58_27
   startString: "{\n\t\"jsonFile\": [\n"
   endString: ']}'
   comma: ','
   insertPos: 0
   commaPos: 0
+--- !u!114 &1295084334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295084329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c9106966d3140446a70e1803914a790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plotPoints: []
+  filePath: Assets/it/Test-data/json-fr123.txt
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
