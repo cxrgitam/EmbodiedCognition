@@ -63,7 +63,7 @@ public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
         if (Physics.Raycast(ray, out hit, 11F, layerMasknum, QueryTriggerInteraction.Ignore))
         {
             Debug.Log("The object layer is:" + hit.transform.gameObject.layer + "and name: " + hit.transform.gameObject.name);
-            return new BaseEvent(eventName, hit.point);
+            return new BaseEvent(eventName, hit.point, Time.time);
         }
 
         return null;

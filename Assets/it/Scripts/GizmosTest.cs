@@ -22,6 +22,7 @@ public class GizmosTest : MonoBehaviour
         //public Dictionary<string,Dictionary<string,double>> 
         public Coordinates Position;
         public string EventName;
+        public float time;
     }
     public class JsonFile
     {

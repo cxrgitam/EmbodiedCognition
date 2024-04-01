@@ -17,9 +17,12 @@ class BaseEvent
     /// </summary>
     public string EventName;
 
-    public BaseEvent(string EventName, Vector3 Position)
+    public float time;
+
+    public BaseEvent(string EventName, Vector3 Position, float time)
     {
         this.Position = Position;
         this.EventName = EventName;
+        this.time = time;
     }
 }

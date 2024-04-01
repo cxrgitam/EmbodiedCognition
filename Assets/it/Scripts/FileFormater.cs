@@ -21,17 +21,17 @@ public class FileFormater : MonoBehaviour
 
         for (int i = 0; i < modifiedContent.Length - 3; i++)
         {
-            if (modifiedContent[i] == '\"' && modifiedContent[i + 1] == '}')
+            if (modifiedContent[i] == '}' && modifiedContent[i + 3] == '{')
             {
                 Debug.Log("hi: " + modifiedContent[i]);
-                commaPos = i + 2; // Position to insert the comma after the closing curly brace
+                commaPos = i + 1; // Position to insert the comma after the closing curly brace
                 modifiedContent = modifiedContent.Insert(commaPos, comma);
                 // Adjust the loop index to skip the inserted comma and the next character
                 i += comma.Length;
             }    
         }
 
-        int rmIdx = modifiedContent.Length - 5;
+        int rmIdx = modifiedContent.Length - 4;
         modifiedContent = modifiedContent.Remove(rmIdx, 1);
 
         File.WriteAllText(filePath, modifiedContent);

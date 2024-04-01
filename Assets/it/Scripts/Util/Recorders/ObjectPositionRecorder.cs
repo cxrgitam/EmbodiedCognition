@@ -42,7 +42,7 @@ public class ObjectPositionRecorder : AbstractEventIntervalRecorder
 
     private BaseEvent PrepareData()
     {
-        return new BaseEvent(eventName, objectToRecord.transform.position);
+        return new BaseEvent(eventName, objectToRecord.transform.position, Time.time);
     }
 
     private bool IsObjectOnScene()
