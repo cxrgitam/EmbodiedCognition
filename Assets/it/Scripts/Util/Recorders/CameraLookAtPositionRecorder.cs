@@ -47,7 +47,7 @@ public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
     private void Update()
     {
         reticle = GameObject.Find("Gaze Reticle(Clone)");
-        eyePos = reticle.transform.position;
+        eyePos = reticle.transform.position + new Vector3(-0.25f, 0.1f, 0.08f);
         
     }
 
