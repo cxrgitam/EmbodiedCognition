@@ -24,11 +24,13 @@ public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
     private GameObject reticle;
     public Vector3 eyePos;
 
+    public Vector3ToJson vecToJson;
 
-    void Awake()
+
+    private void OnEnable()
     {
-        dataPath = Application.persistentDataPath;
-        PlayerPrefs.SetString("dateTime", System.DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss"));
+        dataPath = vecToJson.directoryPath;
+        PlayerPrefs.SetString("dateTime", DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss"));
         dataPath += "/" + PlayerPrefs.GetString("dateTime");
 
         if (!record) return;
@@ -80,4 +82,5 @@ public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
     {
         return cameraToRecord != null;
     }
+
 }

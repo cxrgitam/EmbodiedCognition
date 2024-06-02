@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 
 public class JSONEventWriter : IEventWriter
 {
     private readonly bool createFileIfNonFound;
     private readonly string path;
-
     private readonly bool hasFileToWrite;
+    private static readonly int MaxRetryCount = 5;
+    private static readonly int DelayBetweenRetries = 1000; // milliseconds
 
     public JSONEventWriter(string path, bool createFileIfNonFound)
     {
         this.path = path;
-
         this.createFileIfNonFound = createFileIfNonFound;
         hasFileToWrite = Startup();
     }
@@ -29,24 +30,34 @@ public class JSONEventWriter : IEventWriter
             return false;
         }
 
-        StreamWriter writer = new StreamWriter(path, true);
+        int retryCount = 0;
 
-        try
+        while (retryCount < MaxRetryCount)
         {
-            writer.WriteLine(ComposeJsonString(baseEvent));
+            try
+            {
+                using (var writer = new StreamWriter(new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read)))
+                {
+                    writer.WriteLine(ComposeJsonString(baseEvent));
+                }
+                return true;
+            }
+            catch (IOException ex)
+            {
+                if (IsSharingViolation(ex))
+                {
+                    retryCount++;
+                    Thread.Sleep(DelayBetweenRetries);
+                }
+                else
+                {
+                    Debug.Log(ex.ToString());
+                    return false;
+                }
+            }
+        }
 
-            return true;
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log(e.ToString());
-
-            return false;
-        }
-        finally
-        {
-            writer.Close();
-        }
+        return false;
     }
 
     bool IEventWriter.SaveEvents(List<BaseEvent> baseEvents)
@@ -56,27 +67,37 @@ public class JSONEventWriter : IEventWriter
             return false;
         }
 
-        StreamWriter writer = new StreamWriter(path, true);
+        int retryCount = 0;
 
-        try
+        while (retryCount < MaxRetryCount)
         {
-            foreach (BaseEvent baseEvent in baseEvents)
+            try
             {
-                writer.Write(ComposeJsonString(baseEvent));
+                using (var writer = new StreamWriter(new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read)))
+                {
+                    foreach (BaseEvent baseEvent in baseEvents)
+                    {
+                        writer.WriteLine(ComposeJsonString(baseEvent));
+                    }
+                }
+                return true;
             }
+            catch (IOException ex)
+            {
+                if (IsSharingViolation(ex))
+                {
+                    retryCount++;
+                    Thread.Sleep(DelayBetweenRetries);
+                }
+                else
+                {
+                    Debug.Log(ex.ToString());
+                    return false;
+                }
+            }
+        }
 
-            return true;
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log(e.ToString());
-
-            return false;
-        }
-        finally
-        {
-            writer.Close();
-        }
+        return false;
     }
 
     private bool CreateFile(string path)
@@ -85,14 +106,12 @@ public class JSONEventWriter : IEventWriter
 
         try
         {
-            File.Create(path);
-
+            using (File.Create(path)) { }
             return true;
         }
         catch (System.Exception e)
         {
             Debug.Log(e.ToString());
-
             return false;
         }
     }
@@ -105,9 +124,12 @@ public class JSONEventWriter : IEventWriter
     private bool Startup()
     {
         if (File.Exists(path)) return true;
-
         if (!createFileIfNonFound) return false;
-
         return CreateFile(path);
+    }
+
+    private bool IsSharingViolation(IOException ex)
+    {
+        return ex.Message.Contains("Sharing violation");
     }
 }
