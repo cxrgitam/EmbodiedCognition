@@ -40,7 +40,6 @@ public class FigureEnabler : MonoBehaviour
         if (leftTrigger.action.WasPressedThisFrame() && !isWaiting)
         {
             HandleLeftTriggerPress();
-
         }
 
         UpdateReticle();
@@ -99,6 +98,7 @@ public class FigureEnabler : MonoBehaviour
 
             if (index < itemList.Count)
             {
+                hasWaitedFiveSeconds = false;  // Reset for the next item
                 ActivateCurrentItem();
             }
         }
@@ -153,7 +153,7 @@ public class FigureEnabler : MonoBehaviour
         }
 
         isWaiting = false;
-        hasWaitedFiveSeconds = false;
+        hasWaitedFiveSeconds = false;  // Reset after wait
     }
 
     IEnumerator FiveSecWaitAndActivateNextChild()
@@ -172,6 +172,6 @@ public class FigureEnabler : MonoBehaviour
         }
 
         isWaiting = false;
-        hasWaitedFiveSeconds = true;
+        hasWaitedFiveSeconds = true;  // Mark that we've waited for this item
     }
 }
