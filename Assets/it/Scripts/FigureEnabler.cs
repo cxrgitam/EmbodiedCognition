@@ -7,7 +7,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class FigureEnabler : MonoBehaviour
 {
     public List<GameObject> itemList;
-    public List<GameObject> fiveSecObjList;
     public GameObject reticle;
     private GameObject spawnedReticle;
 
@@ -23,7 +22,6 @@ public class FigureEnabler : MonoBehaviour
     private int index = 0;
     private int childIdx = 0;
     private bool isWaiting = false;
-    private bool hasWaitedFiveSeconds = false;
 
     void Start()
     {
@@ -81,13 +79,9 @@ public class FigureEnabler : MonoBehaviour
             childIdx++;
             itemList[index].transform.GetChild(childIdx).gameObject.SetActive(true);
 
-            if (childIdx == 1 && itemList[index].transform.childCount > 2 && !hasWaitedFiveSeconds)
+            if (childIdx == 1)
             {
                 StartCoroutine(WaitAndActivateNextChild());
-            }
-            else if (childIdx == 2 && itemList[index].transform.childCount > 3 && IsInFiveSecObjList(itemList[index]) && !hasWaitedFiveSeconds)
-            {
-                StartCoroutine(FiveSecWaitAndActivateNextChild());
             }
         }
         else
@@ -98,15 +92,9 @@ public class FigureEnabler : MonoBehaviour
 
             if (index < itemList.Count)
             {
-                hasWaitedFiveSeconds = false;  // Reset for the next item
                 ActivateCurrentItem();
             }
         }
-    }
-
-    private bool IsInFiveSecObjList(GameObject obj)
-    {
-        return fiveSecObjList.Exists(item => item.name == obj.name);
     }
 
     private void UpdateReticle()
@@ -142,36 +130,26 @@ public class FigureEnabler : MonoBehaviour
         isWaiting = true;
         yield return new WaitForSeconds(3f);
 
-        if (itemList[index].transform.childCount > 1)
+        itemList[index].transform.GetChild(1).gameObject.SetActive(false);
+        itemList[index].transform.GetChild(2).gameObject.SetActive(true);
+        childIdx = 2;
+        
+        if (childIdx == 2 && itemList[index].transform.childCount >= 4)
         {
-            itemList[index].transform.GetChild(1).gameObject.SetActive(false);
-            if (itemList[index].transform.childCount > 2)
-            {
-                itemList[index].transform.GetChild(2).gameObject.SetActive(true);
-                childIdx = 2;
-            }
+            StartCoroutine(WaitAndActivateNextChildFiveSeconds());
         }
 
         isWaiting = false;
-        hasWaitedFiveSeconds = false;  // Reset after wait
     }
-
-    IEnumerator FiveSecWaitAndActivateNextChild()
+    IEnumerator WaitAndActivateNextChildFiveSeconds()
     {
         isWaiting = true;
         yield return new WaitForSeconds(5f);
 
-        if (itemList[index].transform.childCount > 2)
-        {
-            itemList[index].transform.GetChild(2).gameObject.SetActive(false);
-            if (itemList[index].transform.childCount > 3)
-            {
-                itemList[index].transform.GetChild(3).gameObject.SetActive(true);
-                childIdx = 3;
-            }
-        }
+        itemList[index].transform.GetChild(2).gameObject.SetActive(false);
+        itemList[index].transform.GetChild(3).gameObject.SetActive(true);
+        childIdx = 3;
 
         isWaiting = false;
-        hasWaitedFiveSeconds = true;  // Mark that we've waited for this item
     }
 }
