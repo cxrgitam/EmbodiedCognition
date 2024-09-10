@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class ScreenshotManager : MonoBehaviour
 {
-    // Key to trigger the screenshot, for example using the "S" key for demonstration purposes.
     public InputActionProperty Abutton;
     public Vector3ToJson vecToJson;
 

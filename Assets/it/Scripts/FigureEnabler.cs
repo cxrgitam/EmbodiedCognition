@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -9,6 +10,8 @@ public class FigureEnabler : MonoBehaviour
     public List<GameObject> itemList;
     public GameObject reticle;
     private GameObject spawnedReticle;
+
+    public goProFigureEnabler gFigEn;
 
     public XRRayInteractor rayInteractor;
 
@@ -35,6 +38,12 @@ public class FigureEnabler : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(index);
+        if(index >= itemList.Count)
+        {
+            gFigEn.enabled = true;
+            this.enabled = false;
+        }
         if (leftTrigger.action.WasPressedThisFrame() && !isWaiting)
         {
             HandleLeftTriggerPress();
@@ -61,12 +70,12 @@ public class FigureEnabler : MonoBehaviour
     {
         spawnedReticle.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
         if (itemList.Count == 0) return;
-
-        if (itemList[index].transform.childCount > 0 && !isWaiting)
+        
+        else if (itemList[index].transform.childCount > 0 && !isWaiting)
         {
             itemList[index].transform.GetChild(childIdx).gameObject.SetActive(false);
         }
-
+        
         MoveToNextChildOrItem();
     }
 
@@ -113,10 +122,16 @@ public class FigureEnabler : MonoBehaviour
 
     private void HandleRightTriggerPress()
     {
-        if (spawnedReticle.activeSelf)
+        if (spawnedReticle.activeSelf && itemList[index].tag == "vertex")
         {
             Debug.Log(hit.point);
-            vecToJson.AddVector(hit.point);
+            vecToJson.AddVector(hit.point,"vertex");
+            spawnedReticle.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, Color.yellow, Random.Range(0f, 1f));
+        }
+        else if(spawnedReticle.activeSelf)
+        {
+            Debug.Log(hit.point);
+            vecToJson.AddVector(hit.point,"NOT vertex");
             spawnedReticle.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.green;
         }
         else
@@ -127,29 +142,42 @@ public class FigureEnabler : MonoBehaviour
 
     IEnumerator WaitAndActivateNextChild()
     {
-        isWaiting = true;
+        isWaiting = true; // Ensure isWaiting is set to true
         yield return new WaitForSeconds(3f);
 
-        itemList[index].transform.GetChild(1).gameObject.SetActive(false);
-        itemList[index].transform.GetChild(2).gameObject.SetActive(true);
-        childIdx = 2;
-        
-        if (childIdx == 2 && itemList[index].transform.childCount >= 4)
+        if (itemList[index].transform.childCount > 1)
         {
-            StartCoroutine(WaitAndActivateNextChildFiveSeconds());
+            itemList[index].transform.GetChild(1).gameObject.SetActive(false);
         }
 
-        isWaiting = false;
+        if (itemList[index].transform.childCount > 2)
+        {
+            itemList[index].transform.GetChild(2).gameObject.SetActive(true);
+            childIdx = 2;
+
+            if (itemList[index].transform.childCount >= 4)
+            {
+                yield return StartCoroutine(WaitAndActivateNextChildFiveSeconds());
+            }
+        }
+
+        isWaiting = false; // Reset isWaiting after all coroutines have completed
     }
+
     IEnumerator WaitAndActivateNextChildFiveSeconds()
     {
-        isWaiting = true;
         yield return new WaitForSeconds(5f);
 
-        itemList[index].transform.GetChild(2).gameObject.SetActive(false);
-        itemList[index].transform.GetChild(3).gameObject.SetActive(true);
-        childIdx = 3;
+        if (itemList[index].transform.childCount > 2)
+        {
+            itemList[index].transform.GetChild(2).gameObject.SetActive(false);
+        }
 
-        isWaiting = false;
+        if (itemList[index].transform.childCount > 3)
+        {
+            itemList[index].transform.GetChild(3).gameObject.SetActive(true);
+            childIdx = 3;
+        }
     }
+
 }

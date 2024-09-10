@@ -9,12 +9,14 @@ public class Vector3Data
     public float x;
     public float y;
     public float z;
+    public string v;
 
-    public Vector3Data(float x, float y, float z)
+    public Vector3Data(float x, float y, float z, string v)
     {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.v = v;
     }
 }
 
@@ -45,9 +47,9 @@ public class Vector3ToJson : MonoBehaviour
         LoadVectors();
     }
 
-    public void AddVector(Vector3 vector)
+    public void AddVector(Vector3 vector, string info)
     {
-        vector3List.vectors.Add(new Vector3Data(vector.x, vector.y, vector.z));
+        vector3List.vectors.Add(new Vector3Data(vector.x, vector.y, vector.z, info));
         SaveVectors();
     }
 
