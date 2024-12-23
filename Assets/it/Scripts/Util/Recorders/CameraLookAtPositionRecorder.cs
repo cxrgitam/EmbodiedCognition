@@ -21,7 +21,7 @@ public class CameraLookAtPositionRecorder : AbstractEventIntervalRecorder
     private readonly Vector3 centerOfScreen = new(0.5F, 0.5F, 0.5F);
 
     //private EyeData eye;
-    private GameObject reticle;
+    public GameObject reticle;
     public Vector3 eyePos;
 
     public Vector3ToJson vecToJson;
