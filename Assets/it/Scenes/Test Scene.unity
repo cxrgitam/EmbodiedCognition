@@ -229,7 +229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3175518005933439389, guid: 6f3c5332fe4314e458e615ec5c0dfc0a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -255,7 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_System: {fileID: 1329617869}
   m_MoveSpeed: 1
-  m_EnableStrafe: 1
+  m_EnableStrafe: 0
   m_EnableFly: 0
   m_UseGravity: 1
   m_GravityApplicationMode: 1
@@ -995,7 +995,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3175518005933439389, guid: 6f3c5332fe4314e458e615ec5c0dfc0a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
